@@ -1,0 +1,420 @@
+import { Shipment, PurchaseOrder, SeafoodSupplier, DemandForecastItem, ShipmentDocument } from '../types';
+
+export const INITIAL_SHIPMENTS: Shipment[] = [
+  {
+    id: 'SHP-9021',
+    containerId: 'MRKU-781923-4',
+    species: 'Norwegian Atlantic Salmon (Salmo salar)',
+    quantityKg: 14200,
+    origin: 'Bergen, Norway',
+    destination: 'Rotterdam Gateway Hub, Netherlands',
+    carrier: 'Maersk Cold Line',
+    status: 'in_transit',
+    currentTemp: 0.8,
+    targetTemp: 0.0,
+    riskLevel: 'normal',
+    qimFreshnessScore: 2, // 0 = caught today, 2 = exceptional
+    shelfLifeRemainingDays: 14,
+    eta: 'Today, 21:30 CET',
+    departureDate: '2026-10-12',
+    buyerName: 'Nordic Oceanic Foods B.V.',
+    supplierName: 'FjordPelagic AS',
+    cargoValueUSD: 168000,
+    telemetryHistory: [
+      { time: '14:00', temperature: 0.2, humidity: 88, targetTemp: 0.0, doorOpen: false },
+      { time: '15:00', temperature: 0.4, humidity: 87, targetTemp: 0.0, doorOpen: false },
+      { time: '16:00', temperature: 0.6, humidity: 89, targetTemp: 0.0, doorOpen: false },
+      { time: '17:00', temperature: 0.7, humidity: 88, targetTemp: 0.0, doorOpen: false },
+      { time: '18:00', temperature: 0.8, humidity: 88, targetTemp: 0.0, doorOpen: false },
+      { time: '19:00', temperature: 0.8, humidity: 89, targetTemp: 0.0, doorOpen: false },
+    ],
+    alerts: []
+  },
+  {
+    id: 'SHP-8842',
+    containerId: 'CMAU-452109-1',
+    species: 'Yellowfin Tuna Loins (Thunnus albacares)',
+    quantityKg: 8500,
+    origin: 'General Santos, Philippines',
+    destination: 'Tokyo Toyosu Distribution, Japan',
+    carrier: 'Ocean Network Express (ONE)',
+    status: 'in_transit',
+    currentTemp: -16.2,
+    targetTemp: -20.0,
+    riskLevel: 'critical',
+    qimFreshnessScore: 8,
+    shelfLifeRemainingDays: 4,
+    eta: 'Tomorrow, 08:00 JST',
+    departureDate: '2026-10-10',
+    buyerName: 'Tsukiji Premium Fish Co.',
+    supplierName: 'Pacific Rim Marine Harvest',
+    cargoValueUSD: 238000,
+    telemetryHistory: [
+      { time: '14:00', temperature: -20.1, humidity: 75, targetTemp: -20.0, doorOpen: false },
+      { time: '15:00', temperature: -19.4, humidity: 77, targetTemp: -20.0, doorOpen: false },
+      { time: '16:00', temperature: -18.2, humidity: 80, targetTemp: -20.0, doorOpen: false },
+      { time: '17:00', temperature: -17.5, humidity: 83, targetTemp: -20.0, doorOpen: true },
+      { time: '18:00', temperature: -16.8, humidity: 82, targetTemp: -20.0, doorOpen: false },
+      { time: '19:00', temperature: -16.2, humidity: 84, targetTemp: -20.0, doorOpen: false },
+    ],
+    alerts: [
+      {
+        id: 'ALT-1092',
+        type: 'temperature_spike',
+        severity: 'high',
+        message: 'Reefer compressor unit #2 cycling fault: temperature drifted to -16.2°C (exceeds -18°C critical sashimi threshold).',
+        timestamp: '42 mins ago',
+        recommendedAction: 'Engage secondary auxiliary chiller unit remotely or divert to Yokohama cryogenic rapid-chill facility.',
+        resolved: false
+      }
+    ]
+  },
+  {
+    id: 'SHP-9104',
+    containerId: 'HLCU-678912-8',
+    species: 'Black Tiger Prawns (Penaeus monodon)',
+    quantityKg: 19500,
+    origin: 'Surat Thani, Thailand',
+    destination: 'Hamburg Cold Terminal, Germany',
+    carrier: 'Hapag-Lloyd Reefer Plus',
+    status: 'customs_hold',
+    currentTemp: -21.4,
+    targetTemp: -22.0,
+    riskLevel: 'moderate',
+    qimFreshnessScore: 4,
+    shelfLifeRemainingDays: 180,
+    eta: 'Delay +36h (Customs Inspection)',
+    departureDate: '2026-09-28',
+    buyerName: 'AlpenGourmet Seafruits AG',
+    supplierName: 'Siam Aqua Exports',
+    cargoValueUSD: 312000,
+    telemetryHistory: [
+      { time: '14:00', temperature: -21.8, humidity: 72, targetTemp: -22.0, doorOpen: false },
+      { time: '15:00', temperature: -21.6, humidity: 73, targetTemp: -22.0, doorOpen: false },
+      { time: '16:00', temperature: -21.5, humidity: 72, targetTemp: -22.0, doorOpen: false },
+      { time: '17:00', temperature: -21.4, humidity: 74, targetTemp: -22.0, doorOpen: false },
+      { time: '18:00', temperature: -21.4, humidity: 74, targetTemp: -22.0, doorOpen: false },
+      { time: '19:00', temperature: -21.4, humidity: 73, targetTemp: -22.0, doorOpen: false },
+    ],
+    alerts: [
+      {
+        id: 'ALT-1093',
+        type: 'customs_delay',
+        severity: 'medium',
+        message: 'Veterinary health certificate digit verification pending at Hamburg Port Gate 4.',
+        timestamp: '2 hours ago',
+        recommendedAction: 'Transmit AI-verified digital Catch Certificate hash to German Federal Office for Agriculture.',
+        resolved: false
+      }
+    ]
+  },
+  {
+    id: 'SHP-9218',
+    containerId: 'MSCU-334182-0',
+    species: 'Wild Alaskan Halibut (Hippoglossus stenolepis)',
+    quantityKg: 6400,
+    origin: 'Dutch Harbor, Alaska',
+    destination: 'Seattle Fishermen Terminal, USA',
+    carrier: 'Matson Cold Express',
+    status: 'in_transit',
+    currentTemp: -1.1,
+    targetTemp: -1.0,
+    riskLevel: 'normal',
+    qimFreshnessScore: 1,
+    shelfLifeRemainingDays: 12,
+    eta: 'Oct 16, 14:00 PDT',
+    departureDate: '2026-10-13',
+    buyerName: 'Pacific Northwest Seafood Group',
+    supplierName: 'Bering Sound Fisheries',
+    cargoValueUSD: 147200,
+    telemetryHistory: [
+      { time: '14:00', temperature: -0.9, humidity: 86, targetTemp: -1.0, doorOpen: false },
+      { time: '15:00', temperature: -1.0, humidity: 86, targetTemp: -1.0, doorOpen: false },
+      { time: '16:00', temperature: -1.1, humidity: 85, targetTemp: -1.0, doorOpen: false },
+      { time: '17:00', temperature: -1.1, humidity: 86, targetTemp: -1.0, doorOpen: false },
+      { time: '18:00', temperature: -1.1, humidity: 87, targetTemp: -1.0, doorOpen: false },
+      { time: '19:00', temperature: -1.1, humidity: 86, targetTemp: -1.0, doorOpen: false },
+    ],
+    alerts: []
+  },
+  {
+    id: 'SHP-9330',
+    containerId: 'OOLU-918231-5',
+    species: 'Live Maine Lobster (Homarus americanus)',
+    quantityKg: 3800,
+    origin: 'Portland, Maine, USA',
+    destination: 'Paris Charles de Gaulle Cold Air Hub, France',
+    carrier: 'Air France Cargo - Reefer Aero',
+    status: 'docked',
+    currentTemp: 4.2,
+    targetTemp: 4.0,
+    riskLevel: 'normal',
+    qimFreshnessScore: 1,
+    shelfLifeRemainingDays: 3,
+    eta: 'Oct 15, 06:15 CET',
+    departureDate: '2026-10-14',
+    buyerName: 'L\'Etoile Seafood Wholesalers Paris',
+    supplierName: 'Gulf of Maine Lobstermen Co-op',
+    cargoValueUSD: 133000,
+    telemetryHistory: [
+      { time: '14:00', temperature: 4.0, humidity: 95, targetTemp: 4.0, doorOpen: false },
+      { time: '15:00', temperature: 4.1, humidity: 94, targetTemp: 4.0, doorOpen: false },
+      { time: '16:00', temperature: 4.2, humidity: 96, targetTemp: 4.0, doorOpen: false },
+      { time: '17:00', temperature: 4.2, humidity: 95, targetTemp: 4.0, doorOpen: false },
+      { time: '18:00', temperature: 4.1, humidity: 95, targetTemp: 4.0, doorOpen: false },
+      { time: '19:00', temperature: 4.2, humidity: 95, targetTemp: 4.0, doorOpen: false },
+    ],
+    alerts: []
+  }
+];
+
+export const INITIAL_PURCHASE_ORDERS: PurchaseOrder[] = [
+  {
+    id: 'PO-10481',
+    poNumber: 'PO-2026-NOR-091',
+    species: 'Atlantic Salmon Fillets (Superior Grade)',
+    supplier: 'FjordPelagic AS',
+    weightKg: 14200,
+    unitPriceUSD: 11.83,
+    totalAmountUSD: 167986,
+    orderDate: '2026-10-11',
+    expectedDelivery: 'Today, 21:30 CET',
+    status: 'in_transit',
+    freshnessGuaranteeDays: 14,
+    temperatureStandard: '0°C to 1°C on crushed slurry ice',
+    riskScore: 12
+  },
+  {
+    id: 'PO-10482',
+    poNumber: 'PO-2026-JPN-044',
+    species: 'Yellowfin Tuna Loins (Sashimi Grade AAA)',
+    supplier: 'Pacific Rim Marine Harvest',
+    weightKg: 8500,
+    unitPriceUSD: 28.00,
+    totalAmountUSD: 238000,
+    orderDate: '2026-10-09',
+    expectedDelivery: 'Tomorrow, 08:00 JST',
+    status: 'in_transit',
+    freshnessGuaranteeDays: 4,
+    temperatureStandard: '-20°C ultra-deep freeze',
+    riskScore: 78
+  },
+  {
+    id: 'PO-10483',
+    poNumber: 'PO-2026-USA-112',
+    species: 'Wild Alaskan Halibut (Dressed Head-Off)',
+    supplier: 'Bering Sound Fisheries',
+    weightKg: 6400,
+    unitPriceUSD: 23.00,
+    totalAmountUSD: 147200,
+    orderDate: '2026-10-12',
+    expectedDelivery: 'Oct 16, 2026',
+    status: 'in_transit',
+    freshnessGuaranteeDays: 12,
+    temperatureStandard: '-1°C to 0°C constant chilled',
+    riskScore: 15
+  },
+  {
+    id: 'PO-10484',
+    poNumber: 'PO-2026-MED-033',
+    species: 'Mediterranean Sea Bass (Dicentrarchus labrax)',
+    supplier: 'Aegean Aqua Artisans',
+    weightKg: 5200,
+    unitPriceUSD: 9.40,
+    totalAmountUSD: 48880,
+    orderDate: '2026-10-14',
+    expectedDelivery: 'Oct 17, 2026',
+    status: 'confirmed',
+    freshnessGuaranteeDays: 10,
+    temperatureStandard: '0°C to 2°C certified chill',
+    riskScore: 8
+  },
+  {
+    id: 'PO-10485',
+    poNumber: 'PO-2026-CHL-009',
+    species: 'Chilean Sea Bass (Dissostichus eleginoides)',
+    supplier: 'Patagonia Deep Harvest',
+    weightKg: 3100,
+    unitPriceUSD: 34.50,
+    totalAmountUSD: 106950,
+    orderDate: '2026-10-08',
+    expectedDelivery: 'Oct 14, 2026',
+    status: 'received',
+    freshnessGuaranteeDays: 20,
+    temperatureStandard: '-22°C blast freeze',
+    riskScore: 5
+  }
+];
+
+export const SUPPLIERS: SeafoodSupplier[] = [
+  {
+    id: 'SUP-01',
+    name: 'FjordPelagic AS',
+    region: 'Vestland, Norway',
+    certifiedSustainable: true,
+    certificationTypes: ['MSC Certified', 'ASC Salmon Standard', 'GlobalG.A.P.'],
+    reliabilityScore: 98,
+    coldChainCompliancePct: 99.4,
+    speciesOffered: ['Atlantic Salmon', 'Fjord Trout', 'Atlantic Mackerel'],
+    avgDeliveryHours: 32,
+    activeContracts: 6,
+    rating: 4.9
+  },
+  {
+    id: 'SUP-02',
+    name: 'Bering Sound Fisheries',
+    region: 'Dutch Harbor, Alaska, USA',
+    certifiedSustainable: true,
+    certificationTypes: ['Alaska RFM', 'MSC Certified'],
+    reliabilityScore: 95,
+    coldChainCompliancePct: 97.8,
+    speciesOffered: ['Wild Alaskan Halibut', 'Sablefish (Black Cod)', 'King Crab'],
+    avgDeliveryHours: 48,
+    activeContracts: 4,
+    rating: 4.8
+  },
+  {
+    id: 'SUP-03',
+    name: 'Pacific Rim Marine Harvest',
+    region: 'Mindanao, Philippines',
+    certifiedSustainable: true,
+    certificationTypes: ['Dolphin Safe', 'Friend of the Sea', 'FIP Certified'],
+    reliabilityScore: 86,
+    coldChainCompliancePct: 89.2,
+    speciesOffered: ['Yellowfin Tuna', 'Bigeye Tuna', 'Mahi Mahi'],
+    avgDeliveryHours: 64,
+    activeContracts: 3,
+    rating: 4.2
+  },
+  {
+    id: 'SUP-04',
+    name: 'Aegean Aqua Artisans',
+    region: 'Chios, Greece',
+    certifiedSustainable: true,
+    certificationTypes: ['Friend of the Sea', 'Naturland Organic Aquaculture'],
+    reliabilityScore: 96,
+    coldChainCompliancePct: 98.1,
+    speciesOffered: ['Mediterranean Sea Bass', 'Sea Bream', 'Red Mullet'],
+    avgDeliveryHours: 24,
+    activeContracts: 5,
+    rating: 4.7
+  },
+  {
+    id: 'SUP-05',
+    name: 'Siam Aqua Exports',
+    region: 'Surat Thani, Thailand',
+    certifiedSustainable: true,
+    certificationTypes: ['BAP 4-Star Certified', 'ASC Shrimp Standard'],
+    reliabilityScore: 92,
+    coldChainCompliancePct: 94.6,
+    speciesOffered: ['Black Tiger Prawns', 'Vannamei White Shrimp', 'Barramundi'],
+    avgDeliveryHours: 72,
+    activeContracts: 4,
+    rating: 4.5
+  }
+];
+
+export const DEMAND_FORECASTS: DemandForecastItem[] = [
+  {
+    id: 'DF-01',
+    species: 'Atlantic Salmon Fillets',
+    currentDemandKg: 12500,
+    projectedDemandKg: 16800,
+    trendPct: 34.4,
+    confidenceScore: 94,
+    recommendedStockAction: 'increase_order',
+    reasoning: 'Q4 European holiday hospitality booking surge and promotional retail commitments.',
+    avgMarketPricePerKg: 11.95
+  },
+  {
+    id: 'DF-02',
+    species: 'Yellowfin Tuna Loins',
+    currentDemandKg: 9100,
+    projectedDemandKg: 8200,
+    trendPct: -9.8,
+    confidenceScore: 88,
+    recommendedStockAction: 'maintain',
+    reasoning: 'Slight seasonal cooling in casual sashimi dining, offset by steady fine-dining demand.',
+    avgMarketPricePerKg: 28.50
+  },
+  {
+    id: 'DF-03',
+    species: 'Wild Alaskan Halibut',
+    currentDemandKg: 4500,
+    projectedDemandKg: 7100,
+    trendPct: 57.7,
+    confidenceScore: 91,
+    recommendedStockAction: 'increase_order',
+    reasoning: 'Fishery quota season closing within 3 weeks; price escalation expected by +18% post-closure.',
+    avgMarketPricePerKg: 23.40
+  },
+  {
+    id: 'DF-04',
+    species: 'Black Tiger Prawns',
+    currentDemandKg: 14000,
+    projectedDemandKg: 13800,
+    trendPct: -1.4,
+    confidenceScore: 95,
+    recommendedStockAction: 'maintain',
+    reasoning: 'Stable frozen buffer stock in Rotterdam and Hamburg cold stores.',
+    avgMarketPricePerKg: 16.00
+  },
+  {
+    id: 'DF-05',
+    species: 'Mediterranean Sea Bass',
+    currentDemandKg: 6200,
+    projectedDemandKg: 4900,
+    trendPct: -20.9,
+    confidenceScore: 86,
+    recommendedStockAction: 'defer_purchase',
+    reasoning: 'Abundant Aegean cage harvests leading to wholesale price softness over next 14 days.',
+    avgMarketPricePerKg: 9.30
+  }
+];
+
+export const SHIPMENT_DOCUMENTS: ShipmentDocument[] = [
+  {
+    id: 'DOC-101',
+    type: 'Catch Certificate',
+    shipmentId: 'SHP-9021',
+    containerId: 'MRKU-781923-4',
+    issueDate: '2026-10-12',
+    verifiedByAI: true,
+    status: 'valid',
+    fileSize: '1.4 MB',
+    notes: 'FAO Zone 27.2a vessel log verified against Norwegian Directorate of Fisheries electronic reporting.'
+  },
+  {
+    id: 'DOC-102',
+    type: 'Health Inspection',
+    shipmentId: 'SHP-9021',
+    containerId: 'MRKU-781923-4',
+    issueDate: '2026-10-12',
+    verifiedByAI: true,
+    status: 'valid',
+    fileSize: '840 KB',
+    notes: 'Mattilsynet veterinary health certificate: microbiological parameters within EU Class A.'
+  },
+  {
+    id: 'DOC-103',
+    type: 'Bill of Lading',
+    shipmentId: 'SHP-8842',
+    containerId: 'CMAU-452109-1',
+    issueDate: '2026-10-10',
+    verifiedByAI: true,
+    status: 'valid',
+    fileSize: '2.1 MB',
+    notes: 'Endorsed to consignee. High seas transshipment ban clause compliant.'
+  },
+  {
+    id: 'DOC-104',
+    type: 'Customs Declaration',
+    shipmentId: 'SHP-9104',
+    containerId: 'HLCU-678912-8',
+    issueDate: '2026-10-13',
+    verifiedByAI: false,
+    status: 'flagged',
+    fileSize: '1.8 MB',
+    notes: 'Discrepancy detected: HS Code 0306.17 (Frozen Tiger Prawns) vs tariff schedule 0306.16.'
+  }
+];

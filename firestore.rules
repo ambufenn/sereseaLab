@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Connection testing
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow read: if isSignedIn() && isValidId(userId);
+      allow create, update: if isSignedIn() && isValidId(userId) && isOwner(userId) &&
+        incoming().userId is string && incoming().userId == request.auth.uid &&
+        incoming().email is string && incoming().email.size() <= 256 &&
+        incoming().role in ['buyer', 'logistics'];
+      allow delete: if false;
+    }
+
+    // Shipments Collection
+    match /shipments/{shipmentId} {
+      allow read: if isSignedIn() && isValidId(shipmentId);
+      allow create, update: if isSignedIn() && isValidId(shipmentId) &&
+        incoming().containerId is string && incoming().containerId.size() <= 64 &&
+        incoming().species is string && incoming().species.size() <= 128 &&
+        incoming().currentTemp is number &&
+        incoming().targetTemp is number &&
+        incoming().riskLevel in ['normal', 'moderate', 'critical'];
+      allow delete: if false;
+    }
+
+    // Purchase Orders Collection
+    match /purchaseOrders/{orderId} {
+      allow read: if isSignedIn() && isValidId(orderId);
+      allow create, update: if isSignedIn() && isValidId(orderId) &&
+        incoming().poNumber is string && incoming().poNumber.size() <= 64 &&
+        incoming().species is string && incoming().species.size() <= 128 &&
+        incoming().supplier is string && incoming().supplier.size() <= 128 &&
+        incoming().weightKg is number &&
+        incoming().totalAmountUSD is number;
+      allow delete: if false;
+    }
+  }
+}

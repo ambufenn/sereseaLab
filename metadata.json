@@ -1,0 +1,6 @@
+{
+  "name": "SerenAgri",
+  "description": "AI-Powered Seafood Supply Chain Intelligence, Cold-Chain Monitoring & Food Waste Prevention",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

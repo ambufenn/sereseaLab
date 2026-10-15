@@ -1,0 +1,79 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User account and profile preferences in SereSeaShip Guard",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "displayName": { "type": "string", "maxLength": 128 },
+        "role": { "type": "string", "enum": ["buyer", "logistics"] },
+        "organization": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "email", "role"]
+    },
+    "Shipment": {
+      "title": "Shipment",
+      "description": "Reefer container shipment tracking cold chain state and telemetry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "containerId": { "type": "string", "maxLength": 64 },
+        "species": { "type": "string", "maxLength": 128 },
+        "quantityKg": { "type": "number" },
+        "origin": { "type": "string", "maxLength": 128 },
+        "destination": { "type": "string", "maxLength": 128 },
+        "carrier": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "enum": ["in_transit", "customs_hold", "delivered", "docked", "delayed"] },
+        "currentTemp": { "type": "number" },
+        "targetTemp": { "type": "number" },
+        "riskLevel": { "type": "string", "enum": ["normal", "moderate", "critical"] },
+        "qimFreshnessScore": { "type": "number" },
+        "shelfLifeRemainingDays": { "type": "number" },
+        "eta": { "type": "string", "maxLength": 64 },
+        "buyerName": { "type": "string", "maxLength": 128 },
+        "supplierName": { "type": "string", "maxLength": 128 },
+        "cargoValueUSD": { "type": "number" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["containerId", "species", "currentTemp", "targetTemp", "riskLevel"]
+    },
+    "PurchaseOrder": {
+      "title": "PurchaseOrder",
+      "description": "Commercial seafood purchase order",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "poNumber": { "type": "string", "maxLength": 64 },
+        "species": { "type": "string", "maxLength": 128 },
+        "supplier": { "type": "string", "maxLength": 128 },
+        "weightKg": { "type": "number" },
+        "unitPriceUSD": { "type": "number" },
+        "totalAmountUSD": { "type": "number" },
+        "orderDate": { "type": "string", "maxLength": 64 },
+        "expectedDelivery": { "type": "string", "maxLength": 64 },
+        "status": { "type": "string", "enum": ["confirmed", "in_transit", "quality_check", "received"] },
+        "freshnessGuaranteeDays": { "type": "number" },
+        "temperatureStandard": { "type": "string", "maxLength": 128 },
+        "riskScore": { "type": "number" }
+      },
+      "required": ["poNumber", "species", "supplier", "weightKg", "totalAmountUSD"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profiles indexed by Firebase Auth UID"
+    },
+    "/shipments/{shipmentId}": {
+      "schema": "Shipment",
+      "description": "Reefer container shipments"
+    },
+    "/purchaseOrders/{orderId}": {
+      "schema": "PurchaseOrder",
+      "description": "Seafood purchase orders"
+    }
+  }
+}
