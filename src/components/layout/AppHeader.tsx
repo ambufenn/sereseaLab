@@ -21,24 +21,27 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 }) => {
   const formatSectionTitle = (sec: string) => {
     switch (sec) {
-      case 'overview': return 'Overview Dashboard';
-      case 'tracking': return 'Global Real-Time Tracking & Fleet Radar';
+      case 'overview': return user.role === 'seller' ? 'Fishery Exporter Overview' : user.role === 'buyer' ? 'Buyer Overview' : 'Operations Overview';
+      case 'tracking': return 'Cross-Strait & Global Real-Time Tracking';
+      case 'inventory': return 'Catch Lots & Fishery Cold Manifest';
+      case 'compliance': return 'BKIPM & SFA Cross-Border Clearance';
+      case 'pricing': return 'Serenade Data AI Pricing & Export Optimizer';
       case 'demand': return 'Demand Intelligence';
       case 'suppliers': return 'Supplier Matching';
-      case 'orders': return 'Order Tracking';
+      case 'orders': return user.role === 'seller' ? 'Singapore Buyer Purchase Orders' : 'Order Tracking';
       case 'quality': return 'Quality & Freshness Risk';
       case 'shipments': return 'Shipment Monitoring';
       case 'coldchain': return 'Cold-Chain Telemetry';
       case 'risk': return 'AI Risk Center';
       case 'waste': return 'Waste Prevention';
       case 'docs': return 'Compliance & Documentation';
-      case 'assistant': return user.role === 'buyer' ? 'AI Seafood Assistant' : 'AI Operations Copilot';
-      case 'lab': return 'Experience Lab';
+      case 'assistant': return user.role === 'seller' ? 'Fishery Export Copilot' : user.role === 'buyer' ? 'AI Seafood Assistant' : 'AI Operations Copilot';
+      case 'lab': return 'Interactive Experience Lab & Flow Diagram';
       default: return 'Dashboard';
     }
   };
 
-  const isBuyer = user.role === 'buyer';
+  const roleColor = user.role === 'buyer' ? 'teal' : user.role === 'seller' ? 'indigo' : 'sky';
 
   return (
     <header className="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between gap-4 sticky top-0 z-30">
@@ -46,11 +49,13 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
       <div className="flex items-center gap-3 min-w-0">
         <div className="hidden sm:flex items-center gap-2 text-xs font-medium text-slate-500">
           <span className="flex items-center gap-1.5 font-semibold text-slate-700">
-            <Anchor className="w-3.5 h-3.5 text-teal-600" />
+            <Anchor className="w-3.5 h-3.5 text-sky-600" />
             SereSeaShip Guard
           </span>
           <span className="text-slate-300">/</span>
-          <span className="capitalize">{user.role} Workspace</span>
+          <span className="capitalize font-medium text-slate-700">
+            {user.role === 'seller' ? 'Exporter' : user.role} Workspace
+          </span>
           <span className="text-slate-300">/</span>
         </div>
         <h1 className="text-sm sm:text-base font-bold text-slate-900 truncate">
@@ -72,20 +77,44 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
           </button>
         )}
 
-        {/* Quick Role Switcher Button */}
-        <button
-          onClick={() => onSwitchRole(isBuyer ? 'logistics' : 'buyer')}
-          className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
-          title={`Switch to ${isBuyer ? 'Logistics' : 'Buyer'} workspace`}
-        >
-          <ArrowRightLeft className="w-3.5 h-3.5 text-slate-500" />
-          <span>Switch to {isBuyer ? 'Logistics' : 'Buyer'}</span>
-        </button>
+        {/* 3-Role Workspace Switcher */}
+        <div className="hidden md:flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200 text-xs font-semibold">
+          <button
+            onClick={() => onSwitchRole('buyer')}
+            className={`px-2.5 py-1 rounded-lg transition-colors ${
+              user.role === 'buyer'
+                ? 'bg-white text-teal-700 shadow-xs font-bold'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Buyer
+          </button>
+          <button
+            onClick={() => onSwitchRole('seller')}
+            className={`px-2.5 py-1 rounded-lg transition-colors ${
+              user.role === 'seller'
+                ? 'bg-white text-indigo-700 shadow-xs font-bold'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Exporter
+          </button>
+          <button
+            onClick={() => onSwitchRole('logistics')}
+            className={`px-2.5 py-1 rounded-lg transition-colors ${
+              user.role === 'logistics'
+                ? 'bg-white text-sky-700 shadow-xs font-bold'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Logistics
+          </button>
+        </div>
 
         {/* Profile Pill */}
         <div className="flex items-center gap-2.5 pl-2 sm:border-l sm:border-slate-200">
           <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white ${
-            isBuyer ? 'bg-teal-600' : 'bg-sky-600'
+            user.role === 'buyer' ? 'bg-teal-600' : user.role === 'seller' ? 'bg-indigo-600' : 'bg-sky-600'
           }`}>
             {user.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
           </div>
@@ -94,7 +123,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
               {user.name}
             </span>
             <span className="block text-[11px] text-slate-500 capitalize">
-              {user.role} · {user.organization}
+              {user.role === 'seller' ? 'Exporter' : user.role} · {user.organization}
             </span>
           </div>
         </div>

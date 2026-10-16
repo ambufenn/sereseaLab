@@ -45,13 +45,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
               Active Persona Workspace
             </label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <button
                 type="button"
                 onClick={() => onRoleChange('buyer')}
-                className={`py-3 px-4 rounded-xl border text-sm font-semibold transition-all ${
+                className={`py-2.5 px-3 rounded-xl border text-xs font-semibold transition-all ${
                   currentRole === 'buyer'
-                    ? 'border-teal-600 bg-teal-50/50 text-teal-800'
+                    ? 'border-teal-600 bg-teal-50/50 text-teal-800 ring-2 ring-teal-500/20'
                     : 'border-slate-200 text-slate-600 hover:border-slate-300'
                 }`}
               >
@@ -59,10 +59,21 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </button>
               <button
                 type="button"
+                onClick={() => onRoleChange('seller')}
+                className={`py-2.5 px-3 rounded-xl border text-xs font-semibold transition-all ${
+                  currentRole === 'seller'
+                    ? 'border-indigo-600 bg-indigo-50/50 text-indigo-800 ring-2 ring-indigo-500/20'
+                    : 'border-slate-200 text-slate-600 hover:border-slate-300'
+                }`}
+              >
+                Fishery Exporter
+              </button>
+              <button
+                type="button"
                 onClick={() => onRoleChange('logistics')}
-                className={`py-3 px-4 rounded-xl border text-sm font-semibold transition-all ${
+                className={`py-2.5 px-3 rounded-xl border text-xs font-semibold transition-all ${
                   currentRole === 'logistics'
-                    ? 'border-sky-600 bg-sky-50/50 text-sky-800'
+                    ? 'border-sky-600 bg-sky-50/50 text-sky-800 ring-2 ring-sky-500/20'
                     : 'border-slate-200 text-slate-600 hover:border-slate-300'
                 }`}
               >
@@ -70,7 +81,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </button>
             </div>
             <p className="text-xs text-slate-400 mt-1.5">
-              Switching workspaces dynamically updates navigation, operational views, and telemetry controls.
+              Switching workspaces dynamically updates navigation, operational views, export manifests, and telemetry controls.
             </p>
           </div>
 

@@ -73,7 +73,7 @@ export const LogisticsOverview: React.FC<LogisticsOverviewProps> = ({
         <StatCard
           label="Deliveries In Progress"
           value={3}
-          subValue="Rotterdam, Tokyo, Paris"
+          subValue="Jurong, Pasir Panjang, Changi"
           trend={{ direction: 'up', text: 'ETA confidence 96%' }}
           icon={Compass}
           accentColor="teal"

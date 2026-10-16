@@ -82,7 +82,7 @@ export const BuyerOverview: React.FC<BuyerOverviewProps> = ({
         <StatCard
           label="Expected Deliveries Today"
           value={arrivingToday || 1}
-          subValue="Rotterdam Gateway Hub"
+          subValue="Jurong Fishery Port Pier 2"
           trend={{ direction: 'neutral', text: 'On Schedule' }}
           icon={Clock}
           accentColor="sky"
@@ -239,17 +239,17 @@ export const BuyerOverview: React.FC<BuyerOverviewProps> = ({
             <div className="space-y-3">
               <div>
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="text-slate-600">Atlantic Salmon (Bergen)</span>
-                  <span className="font-mono font-semibold text-emerald-700">QIM 2.0 · 14 Days Shelf</span>
+                  <span className="text-slate-600">Live Cantang Grouper (Batam, Kepri)</span>
+                  <span className="font-mono font-semibold text-emerald-700">QIM 1.0 · 7 Days Shelf</span>
                 </div>
                 <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div className="bg-emerald-500 h-full w-[90%]" />
+                  <div className="bg-emerald-500 h-full w-[94%]" />
                 </div>
               </div>
 
               <div>
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="text-slate-600">Yellowfin Tuna (Mindanao)</span>
+                  <span className="text-slate-600">Yellowfin Tuna Sashimi (Muara Baru, Jakarta)</span>
                   <span className="font-mono font-semibold text-amber-700">QIM 8.0 · 4 Days Shelf</span>
                 </div>
                 <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
@@ -259,11 +259,11 @@ export const BuyerOverview: React.FC<BuyerOverviewProps> = ({
 
               <div>
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="text-slate-600">Wild Halibut (Dutch Harbor)</span>
-                  <span className="font-mono font-semibold text-emerald-700">QIM 1.0 · 12 Days Shelf</span>
+                  <span className="text-slate-600">Fresh Bigeye Tuna Loins (Benoa, Bali)</span>
+                  <span className="font-mono font-semibold text-emerald-700">QIM 2.0 · 13 Days Shelf</span>
                 </div>
                 <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div className="bg-emerald-500 h-full w-[95%]" />
+                  <div className="bg-emerald-500 h-full w-[90%]" />
                 </div>
               </div>
             </div>

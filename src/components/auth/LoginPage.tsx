@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UserRole, UserProfile } from '../../types';
-import { ShoppingBag, Truck, ArrowRight, Anchor, CheckCircle2, ShieldCheck, Snowflake, LogIn } from 'lucide-react';
+import { ShoppingBag, Truck, ArrowRight, Anchor, CheckCircle2, ShieldCheck, Snowflake, Store, Sparkles } from 'lucide-react';
 import { signInWithGoogle, auth } from '../../lib/firebase';
 import heroImage from '../../assets/images/seafood_logistics_hero_1792035022885.jpg';
 
@@ -20,10 +20,19 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     if (role === 'buyer') {
       setUserName('Sarah Lin');
       setCompanyName('Oceanic Procurement Co.');
-    } else {
+    } else if (role === 'logistics') {
       setUserName('Marcus Vance');
       setCompanyName('Nordic Cold-Chain Fleet');
+    } else {
+      setUserName('Capt. Budi Hendrawan');
+      setCompanyName('PT Batam Samudera Bahari (ID)');
     }
+  };
+
+  const getDefaultOrg = (role: UserRole) => {
+    if (role === 'buyer') return 'Oceanic Procurement Co.';
+    if (role === 'logistics') return 'Nordic Cold-Chain Fleet';
+    return 'PT Batam Samudera Bahari (ID)';
   };
 
   const handleGoogleSignIn = async () => {
@@ -35,7 +44,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         onLogin({
           name: fbUser.displayName || fbUser.email?.split('@')[0] || 'Authenticated User',
           role: selectedRole,
-          organization: companyName.trim() || (selectedRole === 'buyer' ? 'Oceanic Procurement Co.' : 'Nordic Cold-Chain Fleet'),
+          organization: companyName.trim() || getDefaultOrg(selectedRole),
           avatarUrl: fbUser.photoURL || undefined
         });
       }
@@ -57,7 +66,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       onLogin({
         name: userName.trim(),
         role: selectedRole,
-        organization: companyName.trim() || (selectedRole === 'buyer' ? 'Oceanic Procurement Co.' : 'Nordic Cold-Chain Fleet')
+        organization: companyName.trim() || getDefaultOrg(selectedRole)
       });
       setIsLoading(false);
     }, 350);
@@ -132,19 +141,19 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
               <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2.5">
                 Select Operational Workspace
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {/* Buyer Option */}
                 <button
                   type="button"
                   onClick={() => handleRoleChange('buyer')}
-                  className={`p-4 rounded-xl border-2 text-left transition-all flex flex-col justify-between relative ${
+                  className={`p-3.5 rounded-xl border-2 text-left transition-all flex flex-col justify-between relative ${
                     selectedRole === 'buyer'
                       ? 'border-teal-600 bg-teal-50/50 shadow-sm'
                       : 'border-slate-200 hover:border-slate-300 bg-white'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
                       selectedRole === 'buyer' ? 'bg-teal-600 text-white' : 'bg-slate-100 text-slate-600'
                     }`}>
                       <ShoppingBag className="w-4 h-4" />
@@ -154,8 +163,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                     )}
                   </div>
                   <div>
-                    <span className="block text-sm font-bold text-slate-900">Seafood Buyer</span>
-                    <span className="block text-xs text-slate-500 mt-0.5">Purchasing, Suppliers & Freshness</span>
+                    <span className="block text-xs font-bold text-slate-900">Seafood Buyer</span>
+                    <span className="block text-[11px] text-slate-500 mt-0.5">Singapore Purchasing</span>
                   </div>
                 </button>
 
@@ -163,14 +172,14 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                 <button
                   type="button"
                   onClick={() => handleRoleChange('logistics')}
-                  className={`p-4 rounded-xl border-2 text-left transition-all flex flex-col justify-between relative ${
+                  className={`p-3.5 rounded-xl border-2 text-left transition-all flex flex-col justify-between relative ${
                     selectedRole === 'logistics'
                       ? 'border-sky-600 bg-sky-50/50 shadow-sm'
                       : 'border-slate-200 hover:border-slate-300 bg-white'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
                       selectedRole === 'logistics' ? 'bg-sky-600 text-white' : 'bg-slate-100 text-slate-600'
                     }`}>
                       <Truck className="w-4 h-4" />
@@ -180,8 +189,34 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                     )}
                   </div>
                   <div>
-                    <span className="block text-sm font-bold text-slate-900">Logistics & Fleet</span>
-                    <span className="block text-xs text-slate-500 mt-0.5">Cold-Chain, Reefer & Routing</span>
+                    <span className="block text-xs font-bold text-slate-900">Logistics & Fleet</span>
+                    <span className="block text-[11px] text-slate-500 mt-0.5">Cold-Chain Reefer</span>
+                  </div>
+                </button>
+
+                {/* Seller / Exporter Option */}
+                <button
+                  type="button"
+                  onClick={() => handleRoleChange('seller')}
+                  className={`p-3.5 rounded-xl border-2 text-left transition-all flex flex-col justify-between relative ${
+                    selectedRole === 'seller'
+                      ? 'border-indigo-600 bg-indigo-50/50 shadow-sm'
+                      : 'border-slate-200 hover:border-slate-300 bg-white'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      selectedRole === 'seller' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'
+                    }`}>
+                      <Store className="w-4 h-4" />
+                    </div>
+                    {selectedRole === 'seller' && (
+                      <CheckCircle2 className="w-4 h-4 text-indigo-600" />
+                    )}
+                  </div>
+                  <div>
+                    <span className="block text-xs font-bold text-slate-900">Fishery Exporter</span>
+                    <span className="block text-[11px] text-slate-500 mt-0.5">Indonesia Producer</span>
                   </div>
                 </button>
               </div>
@@ -207,7 +242,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                 </svg>
-                <span>Sign in with Google ({selectedRole === 'buyer' ? 'Buyer' : 'Logistics'})</span>
+                <span>Sign in with Google ({selectedRole === 'buyer' ? 'Buyer' : selectedRole === 'logistics' ? 'Logistics' : 'Exporter'})</span>
               </button>
 
               <div className="relative my-4">
@@ -215,7 +250,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                   <div className="w-full border-t border-slate-200" />
                 </div>
                 <div className="relative flex justify-center text-xs">
-                  <span className="bg-white px-2 text-slate-400">or enter with custom credentials</span>
+                  <span className="bg-white px-2 text-slate-400">or enter with role credentials</span>
                 </div>
               </div>
             </div>
@@ -233,7 +268,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                   onChange={(e) => setUserName(e.target.value)}
                   placeholder="e.g., Sarah Lin"
                   required
-                  className="w-full px-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all placeholder:text-slate-400"
+                  className="w-full px-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all placeholder:text-slate-400"
                 />
               </div>
 
@@ -247,7 +282,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   placeholder="e.g., Oceanic Procurement Co."
-                  className="w-full px-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all placeholder:text-slate-400"
+                  className="w-full px-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all placeholder:text-slate-400"
                 />
               </div>
 
@@ -258,7 +293,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                   className={`w-full py-3 px-5 rounded-xl font-semibold text-sm text-white flex items-center justify-center gap-2 transition-all shadow-md active:scale-[0.99] disabled:opacity-70 ${
                     selectedRole === 'buyer'
                       ? 'bg-teal-600 hover:bg-teal-700 shadow-teal-600/20'
-                      : 'bg-sky-600 hover:bg-sky-700 shadow-sky-600/20'
+                      : selectedRole === 'logistics'
+                      ? 'bg-sky-600 hover:bg-sky-700 shadow-sky-600/20'
+                      : 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/20'
                   }`}
                 >
                   {isLoading ? (
@@ -268,7 +305,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                     </div>
                   ) : (
                     <>
-                      <span>Enter {selectedRole === 'buyer' ? 'Buyer' : 'Logistics'} Dashboard</span>
+                      <span>Enter {selectedRole === 'buyer' ? 'Buyer' : selectedRole === 'logistics' ? 'Logistics' : 'Seller Exporter'} Dashboard</span>
                       <ArrowRight className="w-4 h-4" />
                     </>
                   )}
@@ -276,10 +313,13 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
               </div>
             </form>
 
-            {/* Passwordless Demo Tag */}
-            <div className="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
-              <span>Passwordless Demo Environment</span>
-              <span className="font-mono text-slate-500">Instant Access</span>
+            {/* Passwordless Demo Tag & Serenade Data Stamp */}
+            <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-400">
+              <span className="flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+                Created by Serenade Data
+              </span>
+              <span className="font-mono text-slate-500">Live Firebase & Cross-Strait Node</span>
             </div>
           </div>
         </div>

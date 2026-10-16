@@ -1,10 +1,47 @@
-export type UserRole = 'buyer' | 'logistics';
+export type UserRole = 'buyer' | 'logistics' | 'seller';
 
 export interface UserProfile {
   name: string;
   role: UserRole;
   organization: string;
   avatarUrl?: string;
+}
+
+export interface CatchBatch {
+  id: string;
+  batchNumber: string;
+  species: string;
+  harvestMethod: 'Wild Caught' | 'Sustainable Aquaculture' | 'Deep Sea Longline';
+  catchZone: string;
+  harvestDate: string;
+  quantityKg: number;
+  availableKg: number;
+  storageTemp: number;
+  qimGrade: string;
+  phLevel: number;
+  pricePerKgUSD: number;
+  status: 'harvested' | 'chilled_ready' | 'allocated' | 'dispatched';
+  assignedPoId?: string;
+  certificationNumber: string;
+}
+
+export interface SellerOrder {
+  id: string;
+  orderNumber: string;
+  buyerName: string;
+  buyerCountry: string;
+  destinationPort: string;
+  species: string;
+  weightKg: number;
+  unitPriceUSD: number;
+  totalAmountUSD: number;
+  orderDate: string;
+  targetShipDate: string;
+  status: 'pending' | 'accepted' | 'packaged' | 'dispatched' | 'cleared';
+  assignedContainerId?: string;
+  coldChainSpec: string;
+  inspectionStatus: 'Pending BKIPM' | 'BKIPM Pre-Approved' | 'SFA Green-Lane Ready';
+  assignedBatchNumber?: string;
 }
 
 export type ShipmentStatus = 'in_transit' | 'customs_hold' | 'delivered' | 'docked' | 'delayed';

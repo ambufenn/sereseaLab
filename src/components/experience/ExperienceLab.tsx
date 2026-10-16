@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { ReeferTetris } from './ReeferTetris';
 import { SeafoodJourney } from './SeafoodJourney';
 import { ColdChainSimulator } from './ColdChainSimulator';
-import { Gamepad2, Compass, AlertTriangle } from 'lucide-react';
+import { SupplyChainDiagramDemo } from './SupplyChainDiagramDemo';
+import { Gamepad2, Compass, AlertTriangle, Workflow } from 'lucide-react';
 
-export const ExperienceLab: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'tetris' | 'journey' | 'simulator'>('tetris');
+export const ExperienceLab: React.FC<{ initialTab?: 'tetris' | 'journey' | 'simulator' | 'diagram' }> = ({ initialTab = 'diagram' }) => {
+  const [activeTab, setActiveTab] = useState<'tetris' | 'journey' | 'simulator' | 'diagram'>(initialTab);
 
   return (
     <div className="space-y-6">
@@ -22,20 +23,20 @@ export const ExperienceLab: React.FC = () => {
             SereSeaShip Guard Experience Lab
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
-            Hands-on interactive tools demonstrating reefer container packing, ocean-to-plate traceability, and emergency failovers.
+            Hands-on interactive tools demonstrating reefer container packing, ocean-to-plate traceability, interactive flow diagram, and emergency failovers.
           </p>
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-lg border border-slate-200 self-start sm:self-auto">
+        <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-lg border border-slate-200 self-start sm:self-auto flex-wrap">
           <button
-            onClick={() => setActiveTab('tetris')}
+            onClick={() => setActiveTab('diagram')}
             className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors flex items-center gap-1.5 ${
-              activeTab === 'tetris' ? 'bg-white text-emerald-800 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              activeTab === 'diagram' ? 'bg-white text-teal-800 shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Gamepad2 className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Reefer Tetris</span>
+            <Workflow className="w-3.5 h-3.5 text-teal-600" />
+            <span>Flow Simulation Diagram</span>
           </button>
           <button
             onClick={() => setActiveTab('journey')}
@@ -55,14 +56,24 @@ export const ExperienceLab: React.FC = () => {
             <AlertTriangle className="w-3.5 h-3.5 text-sky-600" />
             <span>Cold-Chain Simulator</span>
           </button>
+          <button
+            onClick={() => setActiveTab('tetris')}
+            className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors flex items-center gap-1.5 ${
+              activeTab === 'tetris' ? 'bg-white text-emerald-800 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Gamepad2 className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Reefer Tetris</span>
+          </button>
         </div>
       </div>
 
       {/* Active Tab View */}
       <div>
-        {activeTab === 'tetris' && <ReeferTetris />}
+        {activeTab === 'diagram' && <SupplyChainDiagramDemo />}
         {activeTab === 'journey' && <SeafoodJourney />}
         {activeTab === 'simulator' && <ColdChainSimulator />}
+        {activeTab === 'tetris' && <ReeferTetris />}
       </div>
     </div>
   );

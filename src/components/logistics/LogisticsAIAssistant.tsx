@@ -11,10 +11,10 @@ export const LogisticsAIAssistant: React.FC = () => {
       text: 'Good day Marcus! I am SereSeaShip Guard\'s AI Cold-Chain & Maritime Operations Officer. I monitor live reefer telemetry, detect temperature spikes, predict microbial spoilage velocity, and formulate rapid salvage routes for perishable seafood. How can I assist your fleet dispatch today?',
       timestamp: 'Just now',
       suggestedActions: [
-        'How to mitigate CMAU-452109-1 temperature excursion?',
-        'Suggest reroute for customs-held tiger prawns at Hamburg',
-        'Calculate prevented waste metrics for Q3',
-        'Summarize reefer fleet compressor status'
+        'How to mitigate NSTR-452109-8 Selat Karimata temperature excursion?',
+        'Suggest fast clearance for customs-held tiger prawns at Jurong / SFA',
+        'Calculate prevented seafood waste metrics for Singapore corridor',
+        'Summarize reefer fleet compressor status across Selat Singapura'
       ]
     }
   ]);
